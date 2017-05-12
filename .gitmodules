@@ -1,0 +1,6 @@
+[submodule "submodules/serial"]
+	path = submodules/serial
+	url = https://github.com/wjwwood/serial.git
+[submodule "submodules/libxbee3"]
+	path = submodules/libxbee3
+	url = https://github.com/attie/libxbee3.git
