@@ -4,3 +4,6 @@
 [submodule "submodules/libxbee3"]
 	path = submodules/libxbee3
 	url = https://github.com/attie/libxbee3.git
+[submodule "submodules/ublox"]
+	path = submodules/ublox
+	url = https://github.com/GAVLab/ublox.git
