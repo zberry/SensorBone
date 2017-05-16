@@ -13,24 +13,20 @@ using namespace std;
 #include <stdio.h>
 #include <cstring>
 
-int main() {
-        setenv("LANG","C",1);
-        FILE * fp = popen("/sbin/ifconfig", "r");
-        if (fp) {
-                char *p=NULL, *e; size_t n;
-                while ((getline(&p, &n, fp) > 0) && p) {
-                   if (p = strstr(p, "inet ")) {
-                        p+=5;
-                        if (p = strchr(p, ':')) {
-                            ++p;
-                            if (e = strchr(p, ' ')) {
-                                 *e='\0';
-                                 printf("%s\n", p);
-                            }
-                        }
-                   }
-              }
-        }
-        pclose(fp);
-        return 0;
+#include <log4cxx/logger.h>
+#include <log4cxx/xml/domconfigurator.h>
+
+void setupLog4cxx (void)
+{
+
+    log4cxx::xml::DOMConfigurator::configure("../../config/sensorConfig.xml");
+
+}
+
+int main()
+{
+    setupLog4cxx();
+
+
+    return 0;
 }
