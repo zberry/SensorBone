@@ -9,7 +9,24 @@
 #include <iostream>
 using namespace std;
 
-int main() {
-	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-	return 0;
+#include <stdlib.h>
+#include <stdio.h>
+#include <cstring>
+
+#include <log4cxx/logger.h>
+#include <log4cxx/xml/domconfigurator.h>
+
+void setupLog4cxx (void)
+{
+
+    log4cxx::xml::DOMConfigurator::configure("../../config/sensorConfig.xml");
+
+}
+
+int main()
+{
+    setupLog4cxx();
+
+
+    return 0;
 }
