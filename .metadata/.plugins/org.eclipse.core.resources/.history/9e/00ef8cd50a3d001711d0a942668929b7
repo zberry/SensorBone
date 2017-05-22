@@ -1,0 +1,21 @@
+/*
+ * xbeeSetupConnection.cpp
+ *
+ *  Created on: May 19, 2017
+ *      Author: zberry
+ */
+
+#include "xbeeSetupConnection.h"
+
+namespace sensorbone {
+
+xbeeSetupConnection::xbeeSetupConnection() {
+	// TODO Auto-generated constructor stub
+
+}
+
+xbeeSetupConnection::~xbeeSetupConnection() {
+	// TODO Auto-generated destructor stub
+}
+
+} /* namespace sensorbone */

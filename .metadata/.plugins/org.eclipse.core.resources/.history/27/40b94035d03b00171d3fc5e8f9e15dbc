@@ -1,0 +1,19 @@
+/*
+ * xbeeConnection.h
+ *
+ *  Created on: May 18, 2017
+ *      Author: zberry
+ */
+
+#ifndef XBEECONNECTION_H_
+#define XBEECONNECTION_H_
+
+#include <xbeep.h>
+
+class xbeeConnection: public libxbee::ConCallback {
+public:
+	xbeeConnection();
+	virtual ~xbeeConnection();
+};
+
+#endif /* XBEECONNECTION_H_ */

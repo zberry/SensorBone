@@ -1,0 +1,28 @@
+/*
+ * xbeeSetupConnection.cpp
+ *
+ *  Created on: May 19, 2017
+ *      Author: zberry
+ */
+
+#include "XbeeSetting.h"
+
+using namespace libxbee::Con;
+
+namespace sensorbone {
+
+XbeeSetting::XbeeSetting(boost::shared_ptr<libxbee::XBee> &xbee)
+
+{
+
+	settingsConnection = boost::shared_ptr<:Con> (new Con (xbee, "Local AT"));
+
+
+
+}
+
+XbeeSetting::~XbeeSetting() {
+	// TODO Auto-generated destructor stub
+}
+
+} /* namespace sensorbone */

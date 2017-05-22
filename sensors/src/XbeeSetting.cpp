@@ -1,0 +1,133 @@
+/*
+ * xbeeSetupConnection.cpp
+ *
+ *  Created on: May 19, 2017
+ *      Author: zberry
+ */
+
+#include <cstring>
+#include <arpa/inet.h>
+
+#include <log4cxx/logger.h>
+
+#include "XbeeSetting.h"
+
+using namespace std;
+
+
+static log4cxx::LoggerPtr logger      (log4cxx::Logger::getLogger("sensor.xbeeSettings"));
+static log4cxx::LoggerPtr sentLogger  (log4cxx::Logger::getLogger("sensor.xbeeSettings.sent"));
+static log4cxx::LoggerPtr recvdLogger (log4cxx::Logger::getLogger("sensor.xbeeSettings.sent"));
+
+namespace sensorbone {
+
+XbeeSettings::XbeeSettings (libxbee::XBee &parent, std::string type, struct xbee_conAddress *address) :
+			libxbee::ConCallback(parent, type, address), xbeeSerialNum (0),
+			maxPayloadSize (0)
+	{
+
+	/* Request the Node ID string */
+	this->Tx("NI");
+
+	/* Request the max packet size */
+	this->Tx("NP");
+
+
+    unsigned char nt[4] = "NT";
+    nt [2] = 130; /* 13 seconds */
+	this->Tx (nt, 4);
+
+	/* Find the base station */
+	string nodeToFind ("DN");
+	nodeToFind += "BaseStation1";
+	this->Tx (nodeToFind);
+
+	usleep (10 * 1e6);
+
+	}
+
+XbeeSettings::~XbeeSettings() {
+	// TODO Auto-generated destructor stub
+}
+
+void XbeeSettings::xbee_conCallback(libxbee::Pkt **pkt)
+	{
+    LOG4CXX_DEBUG(recvdLogger, "Got at command \"" << (*pkt)->getHnd()->atCommand << "\"");
+
+    const string &atCommand = (*pkt)->getATCommand();
+
+    /* If this is the Nodes ID */
+    if (!atCommand.compare("NI"))
+    {
+       processNodeID(*pkt);
+    }
+    else if (!atCommand.compare("NP"))
+    {
+    	processMaxPacketSize(*pkt);
+
+    }
+    else
+    {
+    	LOG4CXX_ERROR (recvdLogger, "No case to process message of type " <<
+    			(*pkt)->getATCommand() << " | Data : " << (*pkt)->getData());
+    }
+
+
+
+
+	}
+
+uint16_t XbeeSettings::getMaxPayloadSize() const {
+	return maxPayloadSize;
+}
+
+const std::string& XbeeSettings::getXbeeName() const {
+	return xbeeName;
+}
+
+void XbeeSettings::setXbeeName(const std::string& xbeeName) {
+	this->xbeeName = xbeeName;
+}
+
+void XbeeSettings::processNodeID(libxbee::Pkt* pkt)
+{
+	LOG4CXX_DEBUG (recvdLogger, "Processing NI Command");
+
+	size_t firstNonSpace = pkt->getData().find_first_not_of(' ');
+
+	if (firstNonSpace == std::string::npos)
+	{
+		LOG4CXX_ERROR(recvdLogger,
+				"Error this xbee does not have a node ID string set");
+		return;
+	}
+
+	size_t lastNonSpace = pkt->getData().find_last_not_of(' ');
+	size_t nameRange = lastNonSpace - firstNonSpace + 1;
+
+	xbeeName = pkt->getData().substr(firstNonSpace, nameRange);
+
+	LOG4CXX_DEBUG(recvdLogger, "This xbee's name is \"" << xbeeName << "\"");
+
+}
+
+void XbeeSettings::processMaxPacketSize(libxbee::Pkt* pkt)
+{
+	LOG4CXX_DEBUG (recvdLogger, "Processing max packet size AT Command");
+    uint16_t tempSize;
+
+	::memcpy (&tempSize, pkt->getData().c_str(), sizeof (maxPayloadSize));
+
+	maxPayloadSize = ntohs (tempSize);
+
+	LOG4CXX_DEBUG(recvdLogger, "Max packet size : " << maxPayloadSize);
+
+
+
+}
+
+uint64_t XbeeSettings::getXbeeSerialNum() const {
+	return xbeeSerialNum;
+}
+
+} /* namespace sensorbone */

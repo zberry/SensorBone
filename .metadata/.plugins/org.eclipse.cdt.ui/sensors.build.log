@@ -1,0 +1,15 @@
+22:12:35 **** Incremental Build of configuration Debug for project sensors ****
+make all 
+Building file: ../src/XbeeSetting.cpp
+Invoking: Cross G++ Compiler
+arm-linux-gnueabihf-g++ -std=c++0x -I/usr/include/arm-linux-gnueabihf -I/home/zberry/development/SensorBone/log4cxx/src/main/include -I"/home/zberry/development/SensorBone/submodules/libxbee3/include" -I"/home/zberry/development/SensorBone/submodules/libxbee3" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/XbeeSetting.d" -MT"src/XbeeSetting.o" -o "src/XbeeSetting.o" "../src/XbeeSetting.cpp"
+Finished building: ../src/XbeeSetting.cpp
+ 
+Building target: sensors
+Invoking: Cross G++ Linker
+arm-linux-gnueabihf-g++ -L/usr/lib/arm-linux-gnueabihf -L/home/zberry/development/SensorBone/log4cxx/src/main/cpp/.libs -o "sensors"  ./src/IPHostnameResolver.o ./src/XbeeSetting.o ./src/sensors.o ./src/xbeeConnection.o  /home/zberry/development/SensorBone/submodules/libxbee3/lib/libxbeep.a /home/zberry/development/SensorBone/submodules/libxbee3/lib/libxbee.a -llog4cxx -lpthread
+Finished building target: sensors
+ 
+
+22:12:36 Build Finished (took 1s.10ms)
+

@@ -1,0 +1,16 @@
+/*
+ * xbeeConnection.cpp
+ *
+ *  Created on: May 18, 2017
+ *      Author: zberry
+ */
+
+#include "xbeeConnection.h"
+
+
+xbeeConnection::~xbeeConnection() {
+	// TODO Auto-generated destructor stub
+}
+
+void xbeeConnection::xbee_conCallback(libxbee::Pkt** pkt) {
+}

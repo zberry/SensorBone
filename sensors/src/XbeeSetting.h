@@ -1,0 +1,52 @@
+/*
+ * xbeeSetupConnection.h
+ *
+ *  Created on: May 19, 2017
+ *      Author: zberry
+ */
+
+#ifndef XBEESETTING_H_
+#define XBEESETTING_H_
+
+#include <boost/shared_ptr.hpp>
+
+#include "xbeep.h"
+#include <iostream>
+
+
+namespace sensorbone {
+
+class XbeeSettings : public libxbee::ConCallback
+{
+public:
+	explicit XbeeSettings (libxbee::XBee &parent, std::string type, struct xbee_conAddress *address = NULL);
+	virtual ~XbeeSettings();
+
+	void xbee_conCallback(libxbee::Pkt **pkt);
+
+	/** Method to process the node ID */
+	void processNodeID (libxbee::Pkt *pkt);
+
+	/** Processes the max packet size AT response */
+	void processMaxPacketSize (libxbee::Pkt *pkt);
+
+
+	uint16_t getMaxPayloadSize() const;
+	uint64_t getXbeeAddress() const;
+	const std::string& getXbeeName() const;
+	void setXbeeName(const std::string& xbeeName);
+	uint64_t getXbeeSerialNum() const;
+
+private:
+	std::string xbeeName;
+	xbee_conAddress xbeeAddress;
+	uint64_t xbeeSerialNum;
+    uint16_t maxPayloadSize; /* Bytes */
+
+
+};
+}
+
+
+
+#endif /* XBEESETTING_H_ */

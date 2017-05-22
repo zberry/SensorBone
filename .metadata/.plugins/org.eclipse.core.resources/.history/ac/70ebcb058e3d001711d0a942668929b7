@@ -1,0 +1,75 @@
+/*
+ * xbeeSetupConnection.cpp
+ *
+ *  Created on: May 19, 2017
+ *      Author: zberry
+ */
+
+#include <log4cxx/logger.h>
+
+#include "XbeeSetting.h"
+
+using namespace std;
+
+
+static log4cxx::LoggerPtr logger      (log4cxx::Logger::getLogger("sensor.xbeeSettings"));
+static log4cxx::LoggerPtr sentLogger  (log4cxx::Logger::getLogger("sensor.xbeeSettings.sent"));
+static log4cxx::LoggerPtr recvdLogger (log4cxx::Logger::getLogger("sensor.xbeeSettings.sent"));
+
+namespace sensorbone {
+
+XbeeSettings::XbeeSettings (libxbee::XBee &parent, std::string type, struct xbee_conAddress *address) :
+			libxbee::ConCallback(parent, type, address), xbeeAddress (0), xbeeSerialNum (0),
+			maxPayloadSize (0)
+	{
+
+	this->Tx("NI");
+
+	usleep (10 * 1e6);
+
+	}
+
+XbeeSettings::~XbeeSettings() {
+	// TODO Auto-generated destructor stub
+}
+
+void XbeeSettings::xbee_conCallback(libxbee::Pkt **pkt)
+	{
+    LOG4CXX_DEBUG(recvdLogger, "Got at command \"" << (*pkt)->getHnd()->atCommand << "\"");
+
+    const string &atCommand = (*pkt)->getATCommand();
+
+    if (atCommand.compare("NI"))
+    {
+    	LOG4CXX_DEBUG (recvdLogger, "Processing NI Command");
+    	xbeeName = (*pkt)->getData("AT");
+
+    	LOG4CXX_DEBUG (recvdLogger, "This xbee's name is \"" << xbeeName << "\"");
+    }
+
+
+
+
+	}
+
+uint16_t XbeeSettings::getMaxPayloadSize() const {
+	return maxPayloadSize;
+}
+
+uint64_t XbeeSettings::getXbeeAddress() const {
+	return xbeeAddress;
+}
+
+const std::string& XbeeSettings::getXbeeName() const {
+	return xbeeName;
+}
+
+void XbeeSettings::setXbeeName(const std::string& xbeeName) {
+	this->xbeeName = xbeeName;
+}
+
+uint64_t XbeeSettings::getXbeeSerialNum() const {
+	return xbeeSerialNum;
+}
+
+} /* namespace sensorbone */

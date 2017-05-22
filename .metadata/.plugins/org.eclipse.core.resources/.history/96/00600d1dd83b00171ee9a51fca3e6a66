@@ -1,0 +1,83 @@
+//============================================================================
+// Name        : sensors.cpp
+// Author      : Zachary Berry
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+using namespace std;
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <cstring>
+#include <boost/shared_ptr.hpp>
+
+#include <log4cxx/logger.h>
+#include <log4cxx/xml/domconfigurator.h>
+#include "xbeep.h"
+
+#include "xbeeConnection.h"
+
+log4cxx::LoggerPtr logger;
+using namespace std;
+
+void setupLog4cxx (void)
+{
+
+	const char *logConfigFileName = "./config/sensorConfig.xml";
+    log4cxx::xml::DOMConfigurator::configure(logConfigFileName);
+    logger = log4cxx::Logger::getLogger("sensor.main");
+
+    LOG4CXX_DEBUG(logger, "Lodaded logger xml\"" << logConfigFileName << "\"");
+}
+
+void initXbee(std::string &xbeeCommPort ,std::string &xbeeProtocolVersion, int baudRate)
+{
+
+	LOG4CXX_DEBUG(logger,
+			"Initializing xbee on comm port \"" << xbeeCommPort << "\" baud rate " << baudRate << " xbee API mode \"" << xbeeProtocolVersion << "\"");
+
+	boost::shared_ptr<libxbee::XBee> xbee(
+			new libxbee::XBee(xbeeProtocolVersion, xbeeCommPort, baudRate));
+
+	/* get available connection types */
+	try {
+		std::list<std::string> types = xbee->getConTypes();
+		std::list<std::string>::iterator i;
+
+		std::cout << "Available connection types:\n";
+		for (i = types.begin(); i != types.end(); i++) {
+			std::cout << "  " << *i;
+		}
+		std::cout << "\n";
+	} catch (xbee_err ret) {
+		std::cout << "Error while retrieving connection types...\n";
+	}
+
+	xbeeConnection con (*xbee, "Local AT");
+
+	//con << "Hello World";
+
+
+}
+
+int main()
+{
+    setupLog4cxx();
+
+    LOG4CXX_DEBUG(logger, "Reading config file");
+
+    string xbeeCommPort ("/dev/ttyO2");
+    string xbeeProtocolVersion ("xbee3");
+    int baudRate = 57600;
+
+    initXbee (xbeeCommPort, xbeeProtocolVersion, baudRate);
+
+
+
+
+
+    return 0;
+}

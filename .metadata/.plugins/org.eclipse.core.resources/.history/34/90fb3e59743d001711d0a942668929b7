@@ -1,0 +1,28 @@
+/*
+ * xbeeSetupConnection.cpp
+ *
+ *  Created on: May 19, 2017
+ *      Author: zberry
+ */
+
+#include "XbeeSetting.h"
+
+namespace sensorbone {
+
+XbeeSettings::XbeeSettings (libxbee::XBee &parent, std::string type, struct xbee_conAddress *address) :
+			libxbee::ConCallback(parent, type, address)
+	{
+
+	}
+
+XbeeSettings::~XbeeSettings() {
+	// TODO Auto-generated destructor stub
+}
+
+void XbeeSettings::xbee_conCallback(libxbee::Pkt **pkt)
+	{
+		std::cerr << "Got a packet back containing: " << std::endl;
+		std::cerr << (*pkt)->getATCommand() << std::endl;
+	}
+
+} /* namespace sensorbone */

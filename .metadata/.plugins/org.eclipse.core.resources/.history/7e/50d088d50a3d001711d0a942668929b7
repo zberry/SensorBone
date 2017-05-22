@@ -1,0 +1,23 @@
+/*
+ * xbeeSetupConnection.h
+ *
+ *  Created on: May 19, 2017
+ *      Author: zberry
+ */
+
+#ifndef XBEESETUPCONNECTION_H_
+#define XBEESETUPCONNECTION_H_
+
+#include <xbeep.cpp>
+
+namespace sensorbone {
+
+class xbeeSetupConnection: public libxbee::Con {
+public:
+	xbeeSetupConnection();
+	virtual ~xbeeSetupConnection();
+};
+
+} /* namespace sensorbone */
+
+#endif /* XBEESETUPCONNECTION_H_ */

@@ -1,0 +1,39 @@
+/*
+ * xbeeSetupConnection.h
+ *
+ *  Created on: May 19, 2017
+ *      Author: zberry
+ */
+
+#ifndef XBEESETTING_H_
+#define XBEESETTING_H_
+
+#include <boost/shared_ptr.hpp>
+
+#include "xbeep.h"
+#include <iostream>
+
+
+
+
+namespace sensorbone {
+
+class XbeeSettings : public libxbee::ConCallback
+{
+public:
+	XbeeSettings (libxbee::XBee &parent, std::string type, struct xbee_conAddress *address = NULL);
+
+	void xbee_conCallback(libxbee::Pkt **pkt)
+	{
+		std::cerr << "Got a packet back containing: " << std::endl;
+		std::cerr << (*pkt)->getATCommand() << std::endl;
+	}
+
+
+
+};
+};
+
+
+
+#endif /* XBEESETTING_H_ */

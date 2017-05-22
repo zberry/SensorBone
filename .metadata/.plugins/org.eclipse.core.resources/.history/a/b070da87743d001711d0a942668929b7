@@ -1,0 +1,48 @@
+/*
+ * xbeeSetupConnection.cpp
+ *
+ *  Created on: May 19, 2017
+ *      Author: zberry
+ */
+
+#include "XbeeSetting.h"
+
+namespace sensorbone {
+
+XbeeSettings::XbeeSettings (libxbee::XBee &parent, std::string type, struct xbee_conAddress *address) :
+			libxbee::ConCallback(parent, type, address)
+	{
+
+	}
+
+XbeeSettings::~XbeeSettings() {
+	// TODO Auto-generated destructor stub
+}
+
+void XbeeSettings::xbee_conCallback(libxbee::Pkt **pkt)
+	{
+		std::cerr << "Got a packet back containing: " << std::endl;
+		std::cerr << (*pkt)->getATCommand() << std::endl;
+	}
+
+uint16_t XbeeSettings::getMaxPayloadSize() const {
+	return maxPayloadSize;
+}
+
+uint64_t XbeeSettings::getXbeeAddress() const {
+	return xbeeAddress;
+}
+
+const std::string& XbeeSettings::getXbeeName() const {
+	return xbeeName;
+}
+
+void XbeeSettings::setXbeeName(const std::string& xbeeName) {
+	this->xbeeName = xbeeName;
+}
+
+uint64_t XbeeSettings::getXbeeSerialNum() const {
+	return xbeeSerialNum;
+}
+
+} /* namespace sensorbone */

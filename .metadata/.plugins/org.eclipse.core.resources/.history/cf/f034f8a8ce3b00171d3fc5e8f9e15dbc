@@ -1,0 +1,59 @@
+//============================================================================
+// Name        : sensors.cpp
+// Author      : Zachary Berry
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+using namespace std;
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <cstring>
+#include <boost/shared_ptr.hpp>
+
+#include <log4cxx/logger.h>
+#include <log4cxx/xml/domconfigurator.h>
+#include "xbeep.h"
+
+log4cxx::LoggerPtr logger;
+using namespace std;
+
+void setupLog4cxx (void)
+{
+
+	const char *logConfigFileName = "./config/sensorConfig.xml";
+    log4cxx::xml::DOMConfigurator::configure(logConfigFileName);
+    logger = log4cxx::Logger::getLogger("sensor.main");
+
+    LOG4CXX_DEBUG(logger, "Lodaded logger xml\"" << logConfigFileName << "\"");
+}
+
+void initXbee(std::string &comPort)
+{
+
+
+
+}
+
+int main()
+{
+    setupLog4cxx();
+
+    LOG4CXX_DEBUG(logger, "Reading config file");
+
+    string xbeeCommPort ("/dev/ttyO2");
+    string xbeeProtocolVersion ("xbee3");
+    int baudRate = 57600;
+
+    LOG4CXX_DEBUG(logger, "Initializing xbee on comm port \""
+    		<< xbeeCommPort << "\"");
+
+   libxbee::XBee xbee  (xbeeProtocolVersion, xbeeCommPort, baudRate);
+
+
+
+    return 0;
+}
